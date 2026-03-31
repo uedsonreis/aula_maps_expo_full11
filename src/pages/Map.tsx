@@ -1,9 +1,12 @@
 import React from 'react';
-import MapView, { LongPressEvent } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Alert, StyleSheet, View } from 'react-native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import MapView, { LongPressEvent } from 'react-native-maps';
 
 export default function MapPage() {
+
+    const navigation = useNavigation<NavigationProp<any>>();
 
     const [location, setLocation] = React.useState<Location.LocationObject>();
 
@@ -22,7 +25,7 @@ export default function MapPage() {
     }, []);
 
     function goToCreatePlace(event: LongPressEvent) {
-        Alert.alert('Long Press', 'Localização: ' + JSON.stringify(event.nativeEvent.coordinate));
+        navigation.navigate('EditPlace', { coordinate: event.nativeEvent.coordinate });
     }
 
     return (
