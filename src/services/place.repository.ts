@@ -13,10 +13,16 @@ export async function savePlace(place: Place) {
     const list = await getPlaces();
 
     const registered = list.find(p => p.latitude === place.latitude && p.longitude === place.longitude);
-    if (!registered) {
+    if (registered) {
+        registered.name = place.name;
+        registered.description = place.description;
+        registered.imageUri = place.imageUri;
+
+    } else {
         list.push(place);
-        await AsyncStorage.setItem(PLACE_LIST_KEY, JSON.stringify(list));
     }
+    
+    await AsyncStorage.setItem(PLACE_LIST_KEY, JSON.stringify(list));
 }
 
 export async function removePlace(place: Place) {

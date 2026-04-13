@@ -2,11 +2,16 @@ import React from 'react';
 import * as Location from 'expo-location';
 import { Alert, StyleSheet, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import MapView, { LongPressEvent } from 'react-native-maps';
+import MapView, { LongPressEvent, Marker } from 'react-native-maps';
+
+import * as placeRepo from '../services/place.repository'
+import { Place } from '../models';
 
 export default function MapPage() {
 
     const navigation = useNavigation<NavigationProp<any>>();
+
+    const [places, setPlaces] = React.useState<Place[]>([])
 
     const [location, setLocation] = React.useState<Location.LocationObject>();
 
@@ -22,10 +27,20 @@ export default function MapPage() {
             }
         });
 
+        placeRepo.getPlaces().then(list => setPlaces(list))
+
+        navigation.addListener('focus', () => {
+            placeRepo.getPlaces().then(list => setPlaces(list))
+        })
+
     }, []);
 
     function goToCreatePlace(event: LongPressEvent) {
-        navigation.navigate('EditPlace', { coordinate: event.nativeEvent.coordinate });
+        navigation.navigate('EditPlace', event.nativeEvent.coordinate);
+    }
+
+    function goToEditPlace(place: Place) {
+        navigation.navigate('EditPlace', place)
     }
 
     return (
@@ -39,7 +54,16 @@ export default function MapPage() {
                     heading: 0, pitch: 0, zoom: 15
                 }}
                 onLongPress={goToCreatePlace}
-            />
+            >
+                { places.map(p => (
+                    <Marker
+                        key={`${p.latitude}_${p.longitude}`}
+                        title={p.name}
+                        onPress={() => goToEditPlace(p)}
+                        coordinate={{ latitude: p.latitude, longitude: p.longitude }}
+                    />
+                )) }
+            </MapView>
         </View>
     );
 }
