@@ -15,12 +15,7 @@ export default function ListPage() {
     React.useEffect(() => {
 
         navigation.setOptions({
-            headerLeft: () => (
-                <Ionicons
-                    name='menu' size={32}
-                    onPress={() => navigation.openDrawer()}
-                />
-            )
+            headerLeft: () => <Ionicons name='menu' size={32} onPress={() => navigation.openDrawer()} />
         })
 
         placeRepo.getPlaces().then(list => setPlaces(list))

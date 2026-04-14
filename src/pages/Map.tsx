@@ -60,14 +60,14 @@ export default function MapPage() {
                 }}
                 onLongPress={goToCreatePlace}
             >
-                { places.map(p => (
+                {places.map(p => (
                     <Marker
                         key={`${p.latitude}_${p.longitude}`}
                         title={p.name}
                         onPress={() => goToEditPlace(p)}
                         coordinate={{ latitude: p.latitude, longitude: p.longitude }}
                     />
-                )) }
+                ))}
             </MapView>
         </View>
     );
