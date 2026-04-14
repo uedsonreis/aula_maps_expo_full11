@@ -1,7 +1,8 @@
 import React from 'react';
 import * as Location from 'expo-location';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Alert, StyleSheet, View } from 'react-native';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import MapView, { LongPressEvent, Marker } from 'react-native-maps';
 
 import * as placeRepo from '../services/place.repository'
@@ -9,13 +10,17 @@ import { Place } from '../models';
 
 export default function MapPage() {
 
-    const navigation = useNavigation<NavigationProp<any>>();
+    const navigation = useNavigation<any>();
 
     const [places, setPlaces] = React.useState<Place[]>([])
 
     const [location, setLocation] = React.useState<Location.LocationObject>();
 
     React.useEffect(() => {
+
+        navigation.setOptions({
+            headerLeft: () => <Ionicons name='menu' size={32} onPress={() => navigation.openDrawer()} />
+        })
 
         Location.requestForegroundPermissionsAsync().then((response: Location.LocationPermissionResponse) => {
             if (response.status === 'granted') {

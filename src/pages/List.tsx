@@ -1,17 +1,27 @@
 import React from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import * as placeRepo from '../services/place.repository'
 import { Place } from '../models';
 
 export default function ListPage() {
 
-    const navigation = useNavigation<NavigationProp<any>>();
+    const navigation = useNavigation<any>();
 
-    const [places, setPlaces] = React.useState<Place[]>([])
+    const [places, setPlaces] = React.useState<Place[]>([]);
 
     React.useEffect(() => {
+
+        navigation.setOptions({
+            headerLeft: () => (
+                <Ionicons
+                    name='menu' size={32}
+                    onPress={() => navigation.openDrawer()}
+                />
+            )
+        })
 
         placeRepo.getPlaces().then(list => setPlaces(list))
 
@@ -32,7 +42,7 @@ export default function ListPage() {
                 data={places}
                 renderItem={({ item }) => (
                     <View onTouchEnd={() => goToEditPlace(item)}>
-                        <Text>{item.name}</Text>
+                        <Text style={styles.label}>{item.name}</Text>
                     </View>
                 )}
             />
@@ -44,8 +54,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    map: {
-        width: '100%',
-        height: '100%',
+    label: {
+        padding: 20,
+        borderColor: 'gray',
+        borderBottomWidth: 1,
     },
 });

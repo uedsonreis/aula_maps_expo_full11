@@ -11,7 +11,8 @@ const Stack = createNativeStackNavigator();
 function MapStack() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Map" component={MapPage} options={{ headerShown: false }} />
+            <Stack.Screen
+                name="Map" component={MapPage} options={{ title: '', headerTransparent: true }} />
             <Stack.Screen name="EditPlace" component={EditPlacePage} />
         </Stack.Navigator>
     )
